@@ -47,19 +47,25 @@
                 // Etape 3: récupérer le nom de l'utilisateur
                 $laQuestionEnSql = "SELECT `users`.* "
                         . "FROM `followers` "
-                        . "LEFT JOIN `users` ON `users`.`id`=`followers`.`following_user_id` "
-                        . "WHERE `followers`.`followed_user_id`='" . intval($userId) . "'"
+                        . "LEFT JOIN `users` ON `users`.`id`=`followers`.`followed_user_id` "
+                        . "WHERE `followers`.`following_user_id`='" . intval($userId) . "'"
                         . "GROUP BY `users`.`id`"
                 ;
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 // Etape 4: à vous de jouer
                 //@todo: faire la boucle while de parcours des abonnés et mettre les bonnes valeurs ci dessous 
-                ?>
+                
+                
+                while ($followers = $lesInformations->fetch_assoc())
+                {?>
                 <article>
                     <img src="user.jpg" alt="blason"/>
-                    <h3>Alexadndra</h3>
-                    <p>id:654</p>                    
+                    <a href="wall.php?user_id=<?php echo $followers ['id'] ?>"><?php echo $followers['alias']?></a>
+                    <p><?php echo $followers ['id'] ?></p>                    
                 </article>
+                <?php } ?>
+
+                
             </main>
         </div>
     </body>
