@@ -2,7 +2,7 @@
 <html lang="fr">
     <head>
         <meta charset="utf-8">
-        <title>ReSoC - Administration</title> 
+        <title>ReSoC - Administration</title>
         <meta name="author" content="Julien Falconnet">
         <link rel="stylesheet" href="style.css"/>
     </head>
@@ -94,7 +94,7 @@
                  */
                 while ($tag = $lesInformations->fetch_assoc())
                 {
-                    // echo "<pre>" . print_r($tag, 1) . "</pre>";
+                     echo "<pre>" . print_r($tag, 1) . "</pre>";
                     ?>
                     <article>
                         <h3><?php echo $tag['alias'] ?></h3>

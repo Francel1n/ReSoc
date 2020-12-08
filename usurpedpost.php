@@ -5,7 +5,7 @@ session_start();
 <html lang="fr">
     <head>
         <meta charset="utf-8">
-        <title>ReSoC - Post d'usurpateur</title> 
+        <title>ReSoC - Post d'usurpateur</title>
         <meta name="author" content="Julien Falconnet">
         <link rel="stylesheet" href="style.css"/>
     </head>
@@ -33,7 +33,7 @@ session_start();
 
             <aside>
                 <h2>Présentation</h2>
-                <p>Sur cette page on peut poster un message en se faisant 
+                <p>Sur cette page on peut poster un message en se faisant
                     passer pour quelqu'un d'autre</p>
             </aside>
             <main>
@@ -43,7 +43,7 @@ session_start();
                     /**
                      * BD
                      */
-                    $mysqli = new mysqli("localhost", "root", "root", "socialnetwork_tests");
+                    $mysqli = new mysqli("localhost", "root", "", "socialnetwork_tests");
                     /**
                      * Récupération de la liste des auteurs
                      */
@@ -98,7 +98,7 @@ session_start();
                             echo "Message posté en tant que :" . $listAuteurs[$authorId];
                         }
                     }
-                    ?>                     
+                    ?>
                     <form action="usurpedpost.php" method="post">
                         <input type='hidden' name='???' value='achanger'>
                         <dl>
@@ -113,7 +113,7 @@ session_start();
                             <dd><textarea name='message'></textarea></dd>
                         </dl>
                         <input type='submit'>
-                    </form>               
+                    </form>
                 </article>
             </main>
         </div>
