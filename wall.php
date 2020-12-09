@@ -110,10 +110,43 @@ session_start();
                             <small>♥ <?php echo $post['like_number'] ?></small>
                             <a href=""><?php echo $post['taglist'] ?></a>,
                         </footer>
+
                     </article>
                 <?php } ?>
-
-
+                <article>
+                  <?php
+                  $enCoursDeTraitement = isset($_POST['auteur']);
+                  if ($enCoursDeTraitement)
+                  {
+                      $postContent = $_POST['message'];
+                      $authorId = intval($mysqli->real_escape_string($authorId));
+                      $postContent = $mysqli->real_escape_string($postContent);
+                      $lInstructionSql = "INSERT INTO `posts` "
+                              . "(`id`, `user_id`, `content`, `created`, `parent_id`) "
+                              . "VALUES (NULL, "
+                              . "" . $authorId . ", "
+                              . "'" . $postContent . "', "
+                              . "NOW(), "
+                              . "NULL);"
+                              . "";
+                      $ok = $mysqli->query($lInstructionSql);
+                      if ( ! $ok)
+                      {
+                          echo "Impossible d'ajouter le message: " . $mysqli->error;
+                      } else
+                      {
+                          echo "Message posté en tant que :" . [$authorId];
+                      }
+                  }
+                  ?>
+                  <form action="wall.php?user_id= <?php echo $_SESSION['connected_id'] ?>" method="post">
+                      <dl>
+                          <dt><label for='message'>Message</label></dt>
+                          <dd><textarea name='message'></textarea></dd>
+                      </dl>
+                      <input type='submit'>
+                  </form>
+                  </article>
             </main>
         </div>
     </body>
