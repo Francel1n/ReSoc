@@ -70,26 +70,15 @@ session_start();
                   <h2>Poster un message</h2>
                   <?php
                   $mysqli = new mysqli("localhost", "root", "", "socialnetwork");
-                  $laQuestionEnSql = "SELECT
-                  `posts`.`content`,"
-                          . "`posts`.`created`,"
-                          . "`users`.`alias` as author_name,  "
-                          . "count(`likes`.`id`) as like_number,  "
-                          . "GROUP_CONCAT(distinct`tags`.`label`) AS taglist "
-                          . "FROM `posts`"
-                          . "JOIN `users` ON  `users`.`id`=`posts`.`user_id`"
-                          . "LEFT JOIN `posts_tags` ON `posts`.`id` = `posts_tags`.`post_id`  "
-                          . "LEFT JOIN `tags`       ON `posts_tags`.`tag_id`  = `tags`.`id` "
-                          . "LEFT JOIN `likes`      ON `likes`.`post_id`  = `posts`.`id` "
-                          . "WHERE `posts`.`user_id`='" . intval($userId) . "' "
-                          . "GROUP BY `posts`.`id`"
-                          . "ORDER BY `posts`.`created` DESC  "
-                          ;
-                  $lesInformations = $mysqli->query($laQuestionEnSql);
-                  while ($user = $lesInformations->fetch_assoc())
-                  {
-                      $listAuteurs[$user['connected_id']] = $user['alias'];
-                  }
+                  $Auteur = $_SESSION['connected_id'];
+                //   $laQuestionEnSql = "SELECT * FROM 'users'";
+                //   $lesInformations = $mysqli->query($laQuestionEnSql);
+                //   while ($user = $lesInformations->fetch_assoc())
+                //   {
+                //       $listAuteurs[$user['id']] = $user['alias'];
+                //   }
+                  
+                  
                   $enCoursDeTraitement = isset($_POST['auteur']);
                   if ($enCoursDeTraitement)
                   {
@@ -97,6 +86,7 @@ session_start();
                       $postContent = $_POST['message'];
                       $authorId = intval($mysqli->real_escape_string($authorId));
                       $postContent = $mysqli->real_escape_string($postContent);
+                    //   $alias = "SELECT `alias` FROM `users` WHERE `id` =$_SESSION['connected_id']";
                       $lInstructionSql = "INSERT INTO `posts` "
                               . "(`id`, `user_id`, `content`, `created`, `parent_id`) "
                               . "VALUES (NULL, "
@@ -112,14 +102,14 @@ session_start();
                       }
                   }
                   ?>
+                  
                   <form action="wall.php?user_id=<?php echo $_SESSION['connected_id'] ?>" method="post">
-                      <input type='hidden' name='user_id' value='author_name'>
+                      <input type='hidden' name='user_id' value='<?php echo $_SESSION['connected_id'] ?>'>
                       <dl>
                           <dt><label for='auteur'>Auteur</label></dt>
-                          <dd><select name='auteur'>
+                          <dd><select name='user_id'>
                                   <?php
-                                  foreach ($listAuteurs as $id => $alias)
-                                      echo "<option value='$id'>$alias</option>";
+                                      echo "<option value='$Auteur'>$alias</option>";
                                   ?>
                               </select></dd>
                           <dt><label for='message'>Message</label></dt>
