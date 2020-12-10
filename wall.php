@@ -66,6 +66,68 @@ session_start();
                 </section>
             </aside>
             <main>
+              <article>
+                  <h2>Poster un message</h2>
+                  <?php
+                  $mysqli = new mysqli("localhost", "root", "", "socialnetwork");
+                  $laQuestionEnSql = "SELECT
+                  `posts`.`content`,"
+                          . "`posts`.`created`,"
+                          . "`users`.`alias` as author_name,  "
+                          . "count(`likes`.`id`) as like_number,  "
+                          . "GROUP_CONCAT(distinct`tags`.`label`) AS taglist "
+                          . "FROM `posts`"
+                          . "JOIN `users` ON  `users`.`id`=`posts`.`user_id`"
+                          . "LEFT JOIN `posts_tags` ON `posts`.`id` = `posts_tags`.`post_id`  "
+                          . "LEFT JOIN `tags`       ON `posts_tags`.`tag_id`  = `tags`.`id` "
+                          . "LEFT JOIN `likes`      ON `likes`.`post_id`  = `posts`.`id` "
+                          . "WHERE `posts`.`user_id`='" . intval($userId) . "' "
+                          . "GROUP BY `posts`.`id`"
+                          . "ORDER BY `posts`.`created` DESC  "
+                          ;
+                  $lesInformations = $mysqli->query($laQuestionEnSql);
+                  while ($user = $lesInformations->fetch_assoc())
+                  {
+                      $listAuteurs[$user['connected_id']] = $user['alias'];
+                  }
+                  $enCoursDeTraitement = isset($_POST['auteur']);
+                  if ($enCoursDeTraitement)
+                  {
+                      $authorId = $_POST['auteur'];
+                      $postContent = $_POST['message'];
+                      $authorId = intval($mysqli->real_escape_string($authorId));
+                      $postContent = $mysqli->real_escape_string($postContent);
+                      $lInstructionSql = "INSERT INTO `posts` "
+                              . "(`id`, `user_id`, `content`, `created`, `parent_id`) "
+                              . "VALUES (NULL, "
+                              . "" . $authorId . ", "
+                              . "'" . $postContent . "', "
+                              . "NOW(), "
+                              . "NULL);"
+                              . "";
+                      $ok = $mysqli->query($lInstructionSql);
+                      if ( ! $ok)
+                      {
+                          echo "Impossible d'ajouter le message: " . $mysqli->error;
+                      }
+                  }
+                  ?>
+                  <form action="wall.php?user_id=<?php echo $_SESSION['connected_id'] ?>" method="post">
+                      <input type='hidden' name='user_id' value='author_name'>
+                      <dl>
+                          <dt><label for='auteur'>Auteur</label></dt>
+                          <dd><select name='auteur'>
+                                  <?php
+                                  foreach ($listAuteurs as $id => $alias)
+                                      echo "<option value='$id'>$alias</option>";
+                                  ?>
+                              </select></dd>
+                          <dt><label for='message'>Message</label></dt>
+                          <dd><textarea name='message'></textarea></dd>
+                      </dl>
+                      <input type='submit'>
+                  </form>
+              </article>
                 <?php
                 $laQuestionEnSql = "SELECT `posts`.`content`,"
                         . "`posts`.`created`,"
@@ -105,39 +167,6 @@ session_start();
 
                     </article>
                 <?php } ?>
-                <article>
-                  <?php
-                  $enCoursDeTraitement = isset($_POST['message']);
-                  if ($enCoursDeTraitement)
-                  {
-                      echo "<pre>" . print_r($_POST, 1) . "</pre>";
-                      $postContent = $_POST['message'];
-                      $postContent = $mysqli->real_escape_string($postContent);
-                      $lInstructionSql = "INSERT INTO `posts` "
-                              . "(`id`, `user_id`, `content`, `created`, `parent_id`) "
-                              . "VALUES (NULL, "
-                              . "'" . $postContent . "', "
-                              . "NOW(), "
-                              . "NULL);"
-                              . "";
-                      $ok = $mysqli->query($lInstructionSql);
-                      if ( ! $ok)
-                      {
-                          echo "Impossible d'ajouter le message: " . $mysqli->error;
-                      } else
-                      {
-                          echo "Message posté" ;
-                      }
-                  }
-                  ?>
-                  <form action="wall.php?user_id= <?php echo $_SESSION['connected_id'] ?>" method="post">
-                      <dl>
-                          <dt><label for='message'>Message</label></dt>
-                          <dd><textarea name='message'></textarea></dd>
-                      </dl>
-                      <input type='submit'>
-                  </form>
-                  </article>
             </main>
         </div>
     </body>
