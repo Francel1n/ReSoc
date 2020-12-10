@@ -61,15 +61,12 @@ session_start();
                 <section>
                     <h3>Présentation</h3>
                     <p>Sur cette page vous trouverez tous les message de l'utilisatrice : <?php echo $user['alias'] ?>
-                        (n° <?php echo $_GET['user_id'] ?>)
+                        (n° <?php echo $_SESSION['connected_id'] ?>)
                     </p>
                 </section>
             </aside>
             <main>
                 <?php
-                /**
-                 * Etape 3: récupérer tous les messages de l'utilisatrice
-                 */
                 $laQuestionEnSql = "SELECT `posts`.`content`,"
                         . "`posts`.`created`,"
                         . "`users`.`alias` as author_name,  "
@@ -89,13 +86,8 @@ session_start();
                 {
                     echo("Échec de la requete : " . $mysqli->error);
                 }
-
-                /**
-                 * Etape 4: @todo Parcourir les messsages et remplir correctement le HTML avec les bonnes valeurs php
-                 */
                 while ($post = $lesInformations->fetch_assoc())
                 {
-
                     //echo "<pre>" . print_r($post, 1) . "</pre>";
                     ?>
                     <article>
@@ -115,16 +107,15 @@ session_start();
                 <?php } ?>
                 <article>
                   <?php
-                  $enCoursDeTraitement = isset($_POST['auteur']);
+                  $enCoursDeTraitement = isset($_POST['message']);
                   if ($enCoursDeTraitement)
                   {
+                      echo "<pre>" . print_r($_POST, 1) . "</pre>";
                       $postContent = $_POST['message'];
-                      $authorId = intval($mysqli->real_escape_string($authorId));
                       $postContent = $mysqli->real_escape_string($postContent);
                       $lInstructionSql = "INSERT INTO `posts` "
                               . "(`id`, `user_id`, `content`, `created`, `parent_id`) "
                               . "VALUES (NULL, "
-                              . "" . $authorId . ", "
                               . "'" . $postContent . "', "
                               . "NOW(), "
                               . "NULL);"
@@ -135,7 +126,7 @@ session_start();
                           echo "Impossible d'ajouter le message: " . $mysqli->error;
                       } else
                       {
-                          echo "Message posté en tant que :" . [$authorId];
+                          echo "Message posté" ;
                       }
                   }
                   ?>

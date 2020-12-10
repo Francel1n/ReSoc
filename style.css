@@ -121,9 +121,6 @@ body>header #user:hover ul{
 #wrapper main article footer small{
     float:left;
 }
-#wrapper form{
-  color: #fff;
-}
 
 #wrapper.admin{flex-direction: row-reverse}
 #wrapper.admin aside{flex:1;margin-left:1em;border-radius:0;padding:0;}
