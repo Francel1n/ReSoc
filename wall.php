@@ -78,15 +78,15 @@ session_start();
                 //       $listAuteurs[$user['id']] = $user['alias'];
                 //   }
                   
-                  
-                  $enCoursDeTraitement = isset($_POST['auteur']);
+                
+                  $enCoursDeTraitement = isset($_POST['message']);
                   if ($enCoursDeTraitement)
                   {
-                      $authorId = $_POST['auteur'];
+                      $authorId = $_SESSION['connected_id'];
                       $postContent = $_POST['message'];
                       $authorId = intval($mysqli->real_escape_string($authorId));
                       $postContent = $mysqli->real_escape_string($postContent);
-                    //   $alias = "SELECT `alias` FROM `users` WHERE `id` =$_SESSION['connected_id']";
+                    $alias = "SELECT `alias` FROM `users` WHERE `id` = " . $_SESSION['connected_id'] . ";";
                       $lInstructionSql = "INSERT INTO `posts` "
                               . "(`id`, `user_id`, `content`, `created`, `parent_id`) "
                               . "VALUES (NULL, "
@@ -106,12 +106,6 @@ session_start();
                   <form action="wall.php?user_id=<?php echo $_SESSION['connected_id'] ?>" method="post">
                       <input type='hidden' name='user_id' value='<?php echo $_SESSION['connected_id'] ?>'>
                       <dl>
-                          <dt><label for='auteur'>Auteur</label></dt>
-                          <dd><select name='user_id'>
-                                  <?php
-                                      echo "<option value='$Auteur'>$alias</option>";
-                                  ?>
-                              </select></dd>
                           <dt><label for='message'>Message</label></dt>
                           <dd><textarea name='message'></textarea></dd>
                       </dl>
@@ -119,7 +113,7 @@ session_start();
                   </form>
               </article>
                 <?php
-                $laQuestionEnSql = "SELECT `posts`.`content`,"
+                $laQuestionEnSql = "SELECT `posts`.`content`, "
                         . "`posts`.`created`,"
                         . "`users`.`alias` as author_name,  "
                         . "count(`likes`.`id`) as like_number,  "
@@ -141,6 +135,7 @@ session_start();
                 while ($post = $lesInformations->fetch_assoc())
                 {
                     //echo "<pre>" . print_r($post, 1) . "</pre>";
+                    
                     ?>
                     <article>
                         <h3>
