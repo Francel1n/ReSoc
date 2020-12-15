@@ -1,6 +1,15 @@
 <?php
 session_start();
 ?>
+<?php
+if (isset = $Follow){}
+$following = $_SESSION['connected_id'];
+$followed = $_POST['user_id'];
+$Follow = "INSERT INTO `followers` "
+        . "(`id`, `followed_user_id`, `following_user_id`) "
+        . "VALUES (NULL, "
+        . "" . $followed . ", "
+        . "'" . $following . "');"?>
 <!doctype html>
 <html lang="fr">
     <head>
@@ -63,9 +72,8 @@ session_start();
                     <p>Sur cette page vous trouverez tous les message de l'utilisatrice : <?php echo $user['alias'] ?>
                         (n° <?php echo $_SESSION['connected_id'] ?>)
                     </p>
-                    <form method=post action="wall.php?user_id=<?php echo $_SESSION['connected_id'] ?>",<?php$lInstructionSql = "INSERT INTO followers (followed_user_id, following_user_id)
-VALUES echo $_SESSION['connected_id'], ['user_id']); "?>>
-                      <input type=submit value="S abonner">
+                    <form method=post action="wall.php?user_id=<?php echo $_SESSION['connected_id']; $ok = $mysqli->query($Follow);?>">
+                      <input type=submit value="S'abonner">
                     </form>
                 </section>
             </aside>
