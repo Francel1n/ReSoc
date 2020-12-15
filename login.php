@@ -89,7 +89,7 @@ session_start();
                     ?>
 
                     <form action="login.php" method="post">
-                        <input type='hidden'name='id' value='<?php echo $_SESSION['connected_id'] ?>'>
+                        <input type='hidden'name='id' value=''>
                         <dl>
                             <dt><label for='email'>E-Mail</label></dt>
                             <dd><input type='email'name='email'></dd>

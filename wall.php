@@ -1,15 +1,27 @@
 <?php
 session_start();
+// Lie la base de donnée avec le code
+$mysqli = new mysqli("localhost", "root", "", "socialnetwork");
 ?>
+
 <?php
-if (isset = $Follow){}
+//print_r ($_POST);
+// isset vérifie qu'on a une valeur pour user_id
+$enCoursDechargement = isset($_POST['user_id']);
+if ($enCoursDechargement)
+{
+  // requete Sql pour s'abbonner qui remplie un array dans la base de données
 $following = $_SESSION['connected_id'];
 $followed = $_POST['user_id'];
-$Follow = "INSERT INTO `followers` "
+$follow = "INSERT INTO `followers` "
         . "(`id`, `followed_user_id`, `following_user_id`) "
         . "VALUES (NULL, "
         . "" . $followed . ", "
-        . "'" . $following . "');"?>
+        . "'" . $following . "');";
+// execute la requette
+$ok = $mysqli->query($follow);
+      }
+      ?>
 <!doctype html>
 <html lang="fr">
     <head>
@@ -52,7 +64,7 @@ $Follow = "INSERT INTO `followers` "
             /**
              * Etape 2: se connecter à la base de donnée
              */
-            $mysqli = new mysqli("localhost", "root", "", "socialnetwork");
+
             ?>
 
             <aside>
@@ -70,10 +82,13 @@ $Follow = "INSERT INTO `followers` "
                 <section>
                     <h3>Présentation</h3>
                     <p>Sur cette page vous trouverez tous les message de l'utilisatrice : <?php echo $user['alias'] ?>
-                        (n° <?php echo $_SESSION['connected_id'] ?>)
+                        (n° <?php echo $userId ?>)
                     </p>
-                    <form method=post action="wall.php?user_id=<?php echo $_SESSION['connected_id']; $ok = $mysqli->query($Follow);?>">
+                    <!-- bouton qui redirige vers la page de l'utilisateur-->
+                    <form method='post' action="wall.php?user_id=<?php echo $userId;?>">
                       <input type=submit value="S'abonner">
+                      <!-- bouton caché qui récupére la valeur de user-->
+                      <input type=hidden name='user_id' value= '<?php echo $userId;?>'>
                     </form>
                 </section>
             </aside>
