@@ -5,7 +5,7 @@ $mysqli = new mysqli("localhost", "root", "", "socialnetwork");
 ?>
 
 <?php
-//print_r ($_POST);
+print_r ($_POST);
 // isset vérifie qu'on a une valeur pour user_id
 $enCoursDechargement = isset($_POST['user_id']);
 if ($enCoursDechargement)
@@ -22,6 +22,33 @@ $follow = "INSERT INTO `followers` "
 $ok = $mysqli->query($follow);
       }
       ?>
+
+      <?php
+      function courantAction(){
+        if (isset($_POST['action'])){
+          return $_POST['action'];
+        }
+        else {
+          return null;
+        }
+      }
+      //print_r ($_POST);
+      // isset vérifie qu'on a une valeur pour user_id
+      $enCoursDeliking = isset($_POST['post_id']);
+      if ($enCoursDeliking)
+      {
+        // requete Sql pour liker qui remplie un array dans la base de données
+      $liker= $_GET['user_id'];
+      $liked = $_POST['post_id'];
+      $like= "INSERT INTO `likes` "
+              . "(`id`, `user_id`, `post_id`) "
+              . "VALUES (NULL, "
+              . "" . $liker . ", "
+              . "'" . $liked . "');";
+      // execute la requette
+      $ok = $mysqli->query($like);
+            }
+            ?>
 <!doctype html>
 <html lang="fr">
     <head>
@@ -144,6 +171,7 @@ $ok = $mysqli->query($follow);
                         . "`posts`.`created`,"
                         . "`users`.`alias` as author_name,  "
                         . "count(`likes`.`id`) as like_number,  "
+                        . "`posts`.`id`,"
                         . "GROUP_CONCAT(distinct`tags`.`label`) AS taglist "
                         . "FROM `posts`"
                         . "JOIN `users` ON  `users`.`id`=`posts`.`user_id`"
@@ -173,8 +201,17 @@ $ok = $mysqli->query($follow);
                             <p><?php echo $post['content'] ?></p>
                         </div>
                         <footer>
-                            <small>♥ <?php echo $post['like_number'] ?></small>
-                            <a href=""><?php echo $post['taglist'] ?></a>,
+                          <form method='post' action="wall.php?user_id=<?php echo $_SESSION ['connected_id'];?>">
+                          <input type='submit' name='' value='♥<?php echo $post['like_number'] ?>'/>
+                          <input type='hidden' name='post_id' value='<?php echo $post['id']?>'/>
+                          <input type='hidden' name='action' value='like' />
+                          </form>
+                          <form method='post' action="wall.php?user_id=<?php echo $_SESSION ['connected_id'];?>">
+                          <input type='submit' name='' value='écraser'/>
+                          <input type='hidden' name='post_id' value='<?php echo $post['id']?>'/>
+                          <input type='hidden' name='action' value='delete' />
+                          </form>
+                            <a href=""><?php echo $post['taglist'] ?></a>
                         </footer>
 
                     </article>
