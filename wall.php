@@ -201,7 +201,7 @@ $ok = $mysqli->query($follow);
                             <p><?php echo $post['content'] ?></p>
                         </div>
                         <footer>
-                          <form method='post' action="wall.php?user_id=<?php echo $_SESSION ['connected_id'];?>">
+                          <form method='post' >
                           <input type='submit' name='' value='♥<?php echo $post['like_number'] ?>'/>
                           <input type='hidden' name='post_id' value='<?php echo $post['id']?>'/>
                           <input type='hidden' name='action' value='like' />

@@ -1,6 +1,14 @@
 <?php
-session_start();
+session_start()
+function connecte(){
+    if (isset($_SESSION['connected_id'])){
+        return echo $_SESSION['connected_id'];
+    } else {return echo null}
+        
+}
 ?>
+                           
+
 <!doctype html>
 <html lang="fr">
     <head>
@@ -11,6 +19,7 @@ session_start();
     </head>
     <body>
         <header>
+        <?php if (connecte()){?>
             <img src="resoc.jpg" alt="Logo de notre réseau social"/>
             <nav id="menu">
                 <a href="news.php">Actualités</a>
@@ -29,6 +38,7 @@ session_start();
             </nav>
         </header>
         <div id="wrapper">
+        <?php } else {echo "patate"} ?>
             <?php
             /**
              * Cette page est TRES similaire à wall.php.
